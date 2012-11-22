@@ -7,6 +7,10 @@ START=90
 SERVICE_DAEMONIZE=1
 SERVICE_WRITE_PID=1
 
+# -m = use dnsmasq; no -m = use ISC DHCP
+PM_DNSMASQ_ARG=-m
+#PM_DNSMASQ_ARG=
+
 BIRD=/usr/sbin/bird6-elsa
 PM=/usr/share/lua/pm.lua
 
@@ -48,7 +52,7 @@ start() {
 
             # First, start pm
             # -m = use dnsmasq ( as opposed to ISC DHCP, which is default )
-            ENABLE_MST_DEBUG=1 $PM -m 2>&1 > $LOGDIR/pm.log &
+            ENABLE_MST_DEBUG=1 $PM $PM_DNSMASQ_ARG 2>&1 > $LOGDIR/pm.log &
 
             # Then wait a second (for it to get the skv port up)
             sleep 1
@@ -65,7 +69,7 @@ start() {
             ENABLE_MST_DEBUG=1 $BIRD -c $RCONF
         else
 	    service_start $BIRD -d
-	    service_start $PM
+	    service_start $PM $PM_DNSMASQ_ARG
         fi
 }
 
