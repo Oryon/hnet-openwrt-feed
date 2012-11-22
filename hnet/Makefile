@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hnet
-PKG_SOURCE_VERSION:=5733955da064a3f6463bd3b99e29781811552f3b
-PKG_VERSION:=2012-11-20-$(PKG_SOURCE_VERSION)
+PKG_SOURCE_VERSION:=9796a257ce5615bb5cdb711f9d92edb5f44880da
+PKG_VERSION:=2012-11-22-$(PKG_SOURCE_VERSION)
 PKG_RELEASE:=$(PKG_VERSION)
 
 PKG_SOURCE_URL:=https://github.com/fingon/hnet-core.git
@@ -23,15 +23,17 @@ define Package/hnet
   # These are sometime replaceable ones, but in principle they are helpful too
   # (Used to provide services / get configuration)
   DEPENDS+=+bird4
-  DEPENDS+=+radvd
   # These we should get rid of at some point (replace servers with
   # dnsmasq, and client's with something - busybox?)
-  DEPENDS+=+isc-dhcp-server-ipv4
-  DEPENDS+=+isc-dhcp-server-ipv6
+  #DEPENDS+=+isc-dhcp-server-ipv4
+  #DEPENDS+=+isc-dhcp-server-ipv6
+  #DEPENDS+=+radvd
   DEPENDS+=+isc-dhcp-client-ipv4
   DEPENDS+=+isc-dhcp-client-ipv6
   # Require rdisc6 just so that network gets set up bit faster
   DEPENDS+=+rdisc6
+  # And dnsmasq for DHCPv4/v6 'server' needs
+  DEPENDS+=+dnsmasq-dhcpv6
 endef
 
 define Package/hnet/description

@@ -14,8 +14,11 @@ start() {
         # Needed by BIRD
         mkdir -p /usr/local/var/run
 
-        # Needed by dhcpd's we trigger
+        # Needed by dhcpd's we trigger (if no -m to pm.lua)
         mkdir -p /var/db
+
+        # Needed by dnsmasq's we trigger (if -m to lua)
+        mkdir -p /var/lib/misc
 
         # Create dummy lease files
         touch /var/db/dhcpd.leases
@@ -44,7 +47,8 @@ start() {
             mkdir -p $LOGDIR
 
             # First, start pm
-            ENABLE_MST_DEBUG=1 $PM 2>&1 > $LOGDIR/pm.log &
+            # -m = use dnsmasq ( as opposed to ISC DHCP, which is default )
+            ENABLE_MST_DEBUG=1 $PM -m 2>&1 > $LOGDIR/pm.log &
 
             # Then wait a second (for it to get the skv port up)
             sleep 1
